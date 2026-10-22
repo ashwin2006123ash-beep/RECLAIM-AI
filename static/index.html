@@ -3,49 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RECLAIM AI 2.0 — Autonomous Civic Document Recovery Intelligence Platform</title>
-  <meta name="description" content="Autonomous, inspectable civic document recovery agent featuring Recovery Twins, Proof-of-Truth research, multi-route adaptive planning, Recovery Risk Radar, and Safe Action Sandbox.">
+  <title>RECLAIM AI — Recovery Compass: Lost Document Recovery in 60 Seconds</title>
+  <meta name="description" content="Simple, trustworthy civic recovery compass guiding citizens through lost educational certificates, driving licences, PAN cards, and identity documents in under 60 seconds.">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
+  <!-- Minimal Header (RECLAIM AI Logo, Home, My Plan, Help, Advanced/Judge Mode) -->
   <header class="navbar" id="top-navbar">
     <div class="container nav-container">
-      <a href="#" class="brand" id="nav-brand">
+      <a href="#stage-1-tell-us" class="brand" id="nav-brand">
         <div class="brand-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <polygon points="12 2 19 21 12 17 5 21 12 2"></polygon>
           </svg>
         </div>
         <div class="brand-text">
-          <h1>RECLAIM AI 2.0</h1>
-          <span class="brand-tagline">Autonomous Civic Recovery Platform</span>
+          <h1>RECLAIM AI</h1>
+          <span class="brand-tagline">Recovery Compass</span>
         </div>
       </a>
 
       <nav>
         <ul class="nav-links">
-          <li><button class="nav-link-btn active" data-target="recovery-workspace">Workspace</button></li>
-          <li><button class="nav-link-btn" data-target="recovery-twin-section">Recovery Twin</button></li>
-          <li><button class="nav-link-btn" data-target="route-planner-section">Adaptive Routes</button></li>
-          <li><button class="nav-link-btn" data-target="evidence-vault-section">Evidence Vault</button></li>
-          <li><button class="nav-link-btn" data-target="risk-radar-section">Risk Radar</button></li>
-          <li><button class="nav-link-btn" data-target="safe-sandbox-section">Safe Sandbox</button></li>
-          <li><button class="nav-link-btn" data-target="test-lab-view">Test Lab (TC1–TC4)</button></li>
-          <li><button class="nav-link-btn" data-target="project-info-section">Architecture</button></li>
+          <li><a href="#stage-1-tell-us" class="nav-link-btn active" id="nav-home-btn">🏠 Home</a></li>
+          <li><a href="#stage-3-action-plan" class="nav-link-btn" id="nav-plan-btn">🧭 My Plan</a></li>
+          <li><button type="button" class="nav-link-btn" id="nav-help-btn">💬 Help & FAQ</button></li>
+          <li>
+            <button type="button" class="judge-toggle-btn" id="btn-toggle-judge-mode">
+              <span>⚖️ Advanced / Judge Mode</span>
+            </button>
+          </li>
         </ul>
       </nav>
 
       <div class="nav-badge-engine" id="engine-status-badge">
         <span class="status-dot"></span>
-        <span>INITIALIZING...</span>
+        <span>GROUNDED ENGINE: READY</span>
       </div>
     </div>
   </header>
 
-  <!-- SECTION A: Hero & Landing Page -->
+  <!-- Hero Section -->
   <section class="hero-section" id="hero-landing">
     <div class="container">
       <div class="hero-pill">
@@ -56,361 +56,370 @@
 
       <h1 class="hero-title">
         Lost a document? <br>
-        <span class="highlight">Reclaim your next step.</span>
+        <span class="highlight">Reclaim your next step in 60 seconds.</span>
       </h1>
 
       <p class="hero-desc">
-        A coordinated, evidence-first AI agent platform connecting <strong>Recovery Twins</strong>, <strong>Proof-of-Truth Research</strong>, <strong>Adaptive Route Planning</strong>, <strong>Recovery Risk Radar</strong>, and a <strong>Safe Action Sandbox</strong> for civic document restoration in India.
+        Direct, evidence-grounded civic guidance for lost educational certificates, driving licences, PAN cards, and identity documents in India.
       </p>
 
-      <div class="hero-actions">
-        <button id="btn-hero-start" class="btn btn-primary">
-          <span>🚀 Start Recovery Intelligence</span>
-        </button>
-        <button id="btn-hero-explore" class="btn btn-secondary">
-          <span>🔍 Explore System Architecture</span>
-        </button>
-      </div>
-
-      <!-- Feature Grid: 5 Core Innovations -->
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon-wrapper">🧬</div>
-          <h3>1. Recovery Twin</h3>
-          <p>Live digital case representation with an 8-node topological dependency graph, dynamic state transitions, and unblock triggers.</p>
+      <!-- 3-Stage Stepper -->
+      <div class="compass-stepper" id="main-stepper">
+        <div class="compass-step active" id="stepper-step-1">
+          <div class="step-num">1</div>
+          <span>Tell Us Your Problem</span>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon-wrapper">📜</div>
-          <h3>2. Proof-of-Truth Vault</h3>
-          <p>Mines statutory gazettes, tags provenance (LIVE_VERIFIED, CACHED), and transparently resolves conflicting circulars.</p>
+        <div class="step-divider"></div>
+        <div class="compass-step" id="stepper-step-2">
+          <div class="step-num">2</div>
+          <span>Find My Recovery Plan</span>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon-wrapper">🧭</div>
-          <h3>3. Adaptive Planner</h3>
-          <p>Compares Route 1 (DigiLocker), Route 2 (Statutory Portal), and Route 3 (Physical Counter) with an explainable choice matrix.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon-wrapper">🛡️</div>
-          <h3>4. Risk Radar</h3>
-          <p>Scans for predatory brokers, fee anomalies, and missing evidence. Includes interactive Safe-Domain URL checking.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon-wrapper">🏛️</div>
-          <h3>5. Safe Action Sandbox</h3>
-          <p>Interactive mock portal with idempotency keys, Step 8 human approval gate, and independently verifiable synthetic receipts.</p>
+        <div class="step-divider"></div>
+        <div class="compass-step" id="stepper-step-3">
+          <div class="step-num">3</div>
+          <span>Your Action Plan</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION B: Recovery Workspace & Interactive Presets -->
-  <section class="container" id="recovery-workspace">
-    <!-- Presets Bar for Judges & Reviewers -->
-    <div class="presets-strip">
-      <div class="presets-label">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-        </svg>
-        <span>Demo Presets:</span>
-      </div>
-      <div id="presets-chips-container" style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <!-- Filled dynamically -->
-      </div>
-    </div>
+  <!-- MAIN CITIZEN WORKFLOW CONTAINER -->
+  <main class="container" id="main-workflow-container">
 
-    <!-- Dual Workspace Grid: User Intake & Real Agent Activity Trace -->
-    <div class="workspace-grid">
-      <!-- Left Panel: User Intake Form -->
-      <div class="panel-card" id="intake-panel">
-        <div class="panel-header">
-          <div class="panel-header-left">
-            <h2>Recovery Intake</h2>
+    <!-- STAGE 1: TELL US YOUR PROBLEM -->
+    <section class="panel-card" id="stage-1-tell-us" style="margin-bottom: 24px;">
+      <div class="panel-header">
+        <div class="panel-header-left">
+          <h2>Step 1: Tell Us Your Problem</h2>
+        </div>
+        <span class="panel-step-badge">INTAKE</span>
+      </div>
+
+      <form id="intake-form">
+        <!-- Document Category Selector Cards -->
+        <div class="form-group">
+          <label class="form-label" style="font-size: 1rem; margin-bottom: 8px;">
+            Which document do you need help recovering? *
+          </label>
+          <div class="doc-selector-grid" id="doc-cards-grid">
+            <div class="doc-card-option selected" data-value="edu_cert">
+              <span class="doc-card-check">✓</span>
+              <div class="doc-card-icon">🎓</div>
+              <div class="doc-card-title">Educational Certificate</div>
+              <div class="doc-card-desc">Class 10/12 Marksheet, Degree, Migration</div>
+            </div>
+
+            <div class="doc-card-option" data-value="driving_licence">
+              <span class="doc-card-check">✓</span>
+              <div class="doc-card-icon">🚗</div>
+              <div class="doc-card-title">Driving Licence (DL)</div>
+              <div class="doc-card-desc">State RTO / Sarathi Duplicate DL</div>
+            </div>
+
+            <div class="doc-card-option" data-value="pan_card">
+              <span class="doc-card-check">✓</span>
+              <div class="doc-card-icon">💳</div>
+              <div class="doc-card-title">PAN Card</div>
+              <div class="doc-card-desc">Income Tax / NSDL / UTIITSL Reissue</div>
+            </div>
+
+            <div class="doc-card-option" data-value="voter_id">
+              <span class="doc-card-check">✓</span>
+              <div class="doc-card-icon">🗳️</div>
+              <div class="doc-card-title">Voter ID (EPIC)</div>
+              <div class="doc-card-desc">Election Commission / Form 8 Reissue</div>
+            </div>
+
+            <div class="doc-card-option" data-value="aadhaar">
+              <span class="doc-card-check">✓</span>
+              <div class="doc-card-icon">🆔</div>
+              <div class="doc-card-title">Aadhaar Card</div>
+              <div class="doc-card-desc">UIDAI PVC Reprint / Digital Download</div>
+            </div>
+
+            <div class="doc-card-option" data-value="passport">
+              <span class="doc-card-check">✓</span>
+              <div class="doc-card-icon">🛂</div>
+              <div class="doc-card-title">Passport</div>
+              <div class="doc-card-desc">CPV / Seva Kendra Reissue</div>
+            </div>
           </div>
-          <span class="panel-step-badge">STAGE 1: OBSERVE</span>
+
+          <!-- Hidden sync select for compatibility with backend models -->
+          <select id="input-doc-type" style="display: none;" required>
+            <option value="edu_cert" selected>Educational Certificate</option>
+            <option value="driving_licence">Driving Licence</option>
+            <option value="pan_card">PAN Card</option>
+            <option value="voter_id">Voter ID</option>
+            <option value="aadhaar">Aadhaar Card</option>
+            <option value="passport">Passport</option>
+            <option value="other_cert">Other Government Certificate</option>
+          </select>
         </div>
 
-        <form id="intake-form">
+        <!-- Essential Details: State, Issuing Authority, and Loss Condition -->
+        <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="input-doc-type">Document Category *</label>
-            <select id="input-doc-type" class="form-select" required>
-              <option value="">Loading categories...</option>
-            </select>
+            <label class="form-label" for="input-jurisdiction">State / Region *</label>
+            <input type="text" id="input-jurisdiction" class="form-input" value="Central / All India" placeholder="e.g. Central / Karnataka / Delhi" required>
           </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="input-jurisdiction">State / Region *</label>
-              <input type="text" id="input-jurisdiction" class="form-input" placeholder="e.g. Central / Karnataka / Delhi" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="input-authority">Issuing Authority / Board *</label>
-              <input type="text" id="input-authority" class="form-input" placeholder="e.g. CBSE / MoRTH State RTO / Income Tax Dept" required>
-            </div>
-          </div>
-
           <div class="form-group">
-            <label class="form-label">Loss Condition *</label>
-            <div class="radio-pill-group">
-              <div class="radio-pill-item">
-                <input type="radio" id="status-lost" name="status_type" value="lost" checked>
-                <label class="radio-pill-label" for="status-lost">📄 Lost / Misplaced</label>
-              </div>
-              <div class="radio-pill-item">
-                <input type="radio" id="status-stolen" name="status_type" value="stolen">
-                <label class="radio-pill-label" for="status-stolen">🚨 Stolen / Theft</label>
-              </div>
-              <div class="radio-pill-item">
-                <input type="radio" id="status-damaged" name="status_type" value="damaged">
-                <label class="radio-pill-label" for="status-damaged">💧 Mutilated / Torn</label>
-              </div>
-            </div>
+            <label class="form-label" for="input-authority">Issuing Authority / Board *</label>
+            <input type="text" id="input-authority" class="form-input" value="Central Board of Secondary Education (CBSE)" placeholder="e.g. CBSE / State Board / State RTO" required>
           </div>
-
-          <div class="form-group">
-            <label class="form-label">Supporting Evidence Available (Toggles live Recovery Twin)</label>
-            <div class="checkbox-card-grid">
-              <label class="checkbox-card">
-                <input type="checkbox" id="chk-police-report">
-                <div class="checkbox-card-text">
-                  <strong>Police Report / DDR</strong>
-                  <span>Online loss entry or FIR copy</span>
-                </div>
-              </label>
-
-              <label class="checkbox-card">
-                <input type="checkbox" id="chk-affidavit">
-                <div class="checkbox-card-text">
-                  <strong>Notarized Affidavit</strong>
-                  <span>On stamp paper (if required)</span>
-                </div>
-              </label>
-
-              <label class="checkbox-card">
-                <input type="checkbox" id="chk-id-proof" checked>
-                <div class="checkbox-card-text">
-                  <strong>Photo Identity Proof</strong>
-                  <span>Secondary government ID</span>
-                </div>
-              </label>
-
-              <label class="checkbox-card">
-                <input type="checkbox" id="chk-doc-number" checked>
-                <div class="checkbox-card-text">
-                  <strong>Previous Copy / Number</strong>
-                  <span>Old roll, registration, or scan</span>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="input-circumstances">
-              Incident Context & Circumstances <span class="optional">(Optional)</span>
-            </label>
-            <textarea id="input-circumstances" class="form-textarea" rows="2" placeholder="Briefly describe how or where the document was lost (e.g., lost in transit, misplaced in home relocation)..."></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="input-external-url">
-              Candidate Web URL to Safety-Check <span class="optional">(Optional - e.g. for TC2 verification)</span>
-            </label>
-            <input type="text" id="input-external-url" class="form-input" placeholder="e.g. https://quick-pan-agent.com/apply (Tests Risk Radar & Safety Guard)">
-          </div>
-
-          <div style="display: flex; gap: 12px; margin-top: 24px;">
-            <button type="submit" id="btn-submit-intake" class="btn btn-primary" style="flex: 2;">
-              <span>⚡ Execute Coordinated Recovery Loop</span>
-            </button>
-            <button type="button" id="btn-reset-form" class="btn btn-secondary" style="flex: 1;">
-              <span>Reset</span>
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Right Panel: Agent Activity Panel (Genuine Inspectable Events) -->
-      <div class="panel-card" id="agent-activity-panel">
-        <div class="panel-header">
-          <div class="panel-header-left">
-            <h2>Agent Activity Trace</h2>
-          </div>
-          <span class="panel-step-badge" style="background: rgba(16,185,129,0.15); color: #34d399; border-color: rgba(16,185,129,0.3);">
-            LIVE STATE ENGINE
-          </span>
         </div>
 
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
-          Inspectable audit trail recording Observe -> Twin -> Investigate -> Reason -> Risk -> Sandbox transitions with SQLite persistence.
-        </p>
+        <div class="form-group">
+          <label class="form-label">What happened to the document? *</label>
+          <div class="radio-pill-group">
+            <div class="radio-pill-item">
+              <input type="radio" id="status-lost" name="status_type" value="lost" checked>
+              <label class="radio-pill-label" for="status-lost">📄 Lost / Misplaced</label>
+            </div>
+            <div class="radio-pill-item">
+              <input type="radio" id="status-stolen" name="status_type" value="stolen">
+              <label class="radio-pill-label" for="status-stolen">🚨 Stolen / Theft</label>
+            </div>
+            <div class="radio-pill-item">
+              <input type="radio" id="status-damaged" name="status_type" value="damaged">
+              <label class="radio-pill-label" for="status-damaged">💧 Damaged / Torn</label>
+            </div>
+          </div>
+        </div>
 
-        <div class="agent-activity-feed" id="agent-activity-view">
-          <p class="text-muted" style="text-align: center; padding: 48px 0;">
-            Awaiting user intake submission. Select a preset or click Execute to watch the coordinated agent loop.
+        <!-- Dynamic Adaptive Questions: Revealed contextually -->
+        <div class="form-group" style="background: rgba(255, 255, 255, 0.02); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.92rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span>📋 Evidence & Prerequisites Check:</span>
+            <span style="font-size: 0.74rem; font-weight: normal; color: var(--text-muted);">(Helps the Compass choose between instant digital retrieval and postal reissue)</span>
+          </div>
+
+          <div class="checkbox-card-grid">
+            <label class="checkbox-card" id="card-police-report">
+              <input type="checkbox" id="chk-police-report">
+              <div class="checkbox-card-text">
+                <strong>Police Lost Report / DDR</strong>
+                <span>Online lost entry or police diary</span>
+              </div>
+            </label>
+
+            <label class="checkbox-card" id="card-doc-number">
+              <input type="checkbox" id="chk-doc-number" checked>
+              <div class="checkbox-card-text">
+                <strong>Previous Roll/Document Number</strong>
+                <span>Photocopy, scan, or registration number</span>
+              </div>
+            </label>
+
+            <label class="checkbox-card" id="card-id-proof">
+              <input type="checkbox" id="chk-id-proof" checked>
+              <div class="checkbox-card-text">
+                <strong>Photo Identity Proof</strong>
+                <span>Secondary government ID (Aadhaar / Voter ID)</span>
+              </div>
+            </label>
+
+            <label class="checkbox-card" id="card-affidavit">
+              <input type="checkbox" id="chk-affidavit">
+              <div class="checkbox-card-text">
+                <strong>Notarized Affidavit</strong>
+                <span>Sworn declaration on stamp paper</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Adaptive Outage & Broker Testing Row -->
+          <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #fbbf24; cursor: pointer;">
+              <input type="checkbox" id="chk-simulate-outage">
+              <span>⚡ <strong>Simulate Primary Route Outage</strong> (Tests automatic fallback to Plan B)</span>
+            </label>
+
+            <div style="flex: 1; min-width: 260px;">
+              <input type="text" id="input-external-url" class="form-input" style="padding: 6px 12px; font-size: 0.8rem;" placeholder="Optional: Enter candidate website to safety-check (e.g. quick-pan-agent.com)...">
+            </div>
+          </div>
+
+          <textarea id="input-circumstances" style="display: none;"></textarea>
+        </div>
+
+        <!-- STAGE 2: FIND MY RECOVERY PLAN BUTTON -->
+        <div style="margin: 24px 0 16px;" id="stage-2-find-plan">
+          <button type="submit" id="btn-submit-intake" class="btn-find-plan">
+            <span>🧭 Find My Recovery Plan</span>
+          </button>
+        </div>
+
+        <!-- Judge Demonstration Scenarios Strip -->
+        <div style="background: rgba(11, 19, 41, 0.6); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 16px;">
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em;">
+            ⚡ Or test a judge demonstration scenario in 1 click:
+          </div>
+          <div id="presets-chips-container" style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <!-- Filled dynamically from DEMO_PRESETS -->
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- STAGE 3: YOUR ACTION PLAN (THE RECOVERY COMPASS RESULT) -->
+    <section id="stage-3-action-plan" style="margin-bottom: 32px;">
+      <!-- Disclaimer Banner -->
+      <div class="disclaimer-banner">
+        <div style="font-size: 1.3rem; line-height: 1;">🛡️</div>
+        <div>
+          <strong>RECLAIM AI Recovery Compass &bull; Civic Planning Assistant</strong><br>
+          This is an independent guidance engine providing statutory route comparisons, preparation checklists, and verified fees. 
+          Final applications and fee payments take place strictly on authorized official government portals (<code>.gov.in</code>).
+        </div>
+      </div>
+
+      <!-- Integrated Compass Result Container -->
+      <div id="recovery-compass-result">
+        <!-- Rendered dynamically by UI.renderRecoveryCompass -->
+        <div class="panel-card" style="text-align: center; padding: 48px 24px; color: var(--text-muted);">
+          <div style="font-size: 3rem; margin-bottom: 12px;">🧭</div>
+          <h3 style="color: var(--text-primary); margin-bottom: 8px;">Your Recovery Plan Will Appear Here</h3>
+          <p style="max-width: 500px; margin: 0 auto 20px; font-size: 0.9rem;">
+            Select your lost document above and click <strong>“Find My Recovery Plan”</strong> or pick a judge demonstration scenario.
           </p>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- INNOVATION 1 SECTION: RECOVERY TWIN & DEPENDENCY GRAPH -->
-  <section class="container" id="recovery-twin-section">
-    <div id="recovery-twin-view" style="display: none;">
-      <div class="panel-card">
-        <div class="panel-header">
-          <div class="panel-header-left">
-            <h2>Innovation 1: Recovery Twin & Dependency Graph</h2>
+    <!-- COLLAPSIBLE ADVANCED / JUDGE MODE SECTION -->
+    <section class="judge-section-card" id="advanced-judge-section" style="display: none;">
+      <div class="judge-section-header" id="judge-section-header-bar">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.2rem;">⚖️</span>
+          <div>
+            <h3 style="font-size: 1.1rem; color: #c4b5fd; margin-bottom: 2px;">Advanced / Judge Mode</h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">
+              Deep technical inspectability: Digital Twin, 7-Tier Provenance Graph, Counterfactual Simulator, Risk Radar, and Test Lab.
+            </span>
           </div>
-          <span class="panel-step-badge">LIVE DIGITAL TWIN</span>
         </div>
-        <p style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 14px;">
-          Live digital representation of your document recovery case with genuine topological dependency states (BLOCKED, READY, IN_PROGRESS, COMPLETED, NEEDS_VERIFICATION).
-        </p>
-        <div id="recovery-twin-graph-container"></div>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-close-judge-mode">
+          ✕ Hide Judge Mode
+        </button>
       </div>
-    </div>
-  </section>
 
-  <!-- INNOVATION 3 SECTION: ADAPTIVE MULTI-ROUTE PLANNER -->
-  <section class="container" id="route-planner-section">
-    <div id="route-planner-view" style="display: none;">
-      <div id="route-planner-container"></div>
-    </div>
-  </section>
+      <!-- Judge Mode Navigation Tabs -->
+      <div class="judge-tabs-bar" id="judge-tabs-bar">
+        <button class="judge-tab-pill active" data-tab="tab-twin">🧬 Digital Twin (8 Nodes)</button>
+        <button class="judge-tab-pill" data-tab="tab-prov">🔍 Provenance Graph (7 Tiers)</button>
+        <button class="judge-tab-pill" data-tab="tab-counter">⚖️ Counterfactual (5 Scenarios)</button>
+        <button class="judge-tab-pill" data-tab="tab-vault">📜 Evidence Vault</button>
+        <button class="judge-tab-pill" data-tab="tab-radar">🛡️ Risk Radar</button>
+        <button class="judge-tab-pill" data-tab="tab-sandbox">🏛️ Safe Sandbox</button>
+        <button class="judge-tab-pill" data-tab="tab-testlab">🧪 Test Lab (TC1–TC4 + Adversarial)</button>
+        <button class="judge-tab-pill" data-tab="tab-trace">📐 Trace & Architecture</button>
+      </div>
 
-  <!-- INNOVATION 2 SECTION: PROOF-OF-TRUTH EVIDENCE VAULT -->
-  <section class="container" id="evidence-vault-section">
-    <div id="evidence-vault-view" style="display: none;">
-      <div id="evidence-vault-container"></div>
-    </div>
-  </section>
-
-  <!-- INNOVATION 4 SECTION: RECOVERY RISK RADAR -->
-  <section class="container" id="risk-radar-section">
-    <div id="risk-radar-view" style="display: none;">
-      <div id="risk-radar-container"></div>
-    </div>
-  </section>
-
-  <!-- INNOVATION 5 SECTION: SAFE ACTION SANDBOX & MOCK PORTAL -->
-  <section class="container" id="safe-sandbox-section">
-    <div id="safe-sandbox-view" style="display: none;">
-      <div id="safe-sandbox-container"></div>
-    </div>
-  </section>
-
-  <!-- SECTION D & E: Recovery Results, Readiness Score, and Application Tracking -->
-  <section class="container" id="results-section">
-    <div id="results-view" style="display: none;">
-      <div class="results-container">
-        <!-- Left: Actionable Roadmap & Next Steps -->
-        <div>
-          <div class="panel-card" style="margin-bottom: 24px;">
-            <div class="panel-header">
-              <div class="panel-header-left">
-                <h2>Recommended Next Steps</h2>
-              </div>
-              <span class="panel-step-badge">ROADMAP</span>
-            </div>
-            <div id="next-steps-container"></div>
-          </div>
-
-          <!-- Application Tracking Status Card -->
-          <div id="tracking-status-container"></div>
-        </div>
-
-        <!-- Right: Readiness Indicator, Fee Transparency, & Source Cards -->
-        <div>
-          <!-- Readiness Gauge -->
-          <div id="readiness-gauge-container"></div>
-
-          <!-- Fee Transparency Card -->
-          <div id="fee-card-container"></div>
-
-          <!-- Official Sources & Safety Flagged Cards -->
-          <div class="panel-card">
-            <div class="panel-header">
-              <div class="panel-header-left">
-                <h2>Evidence Vault & Sources</h2>
-              </div>
-              <span class="panel-step-badge">ALLOWLIST GUARD</span>
-            </div>
-            <div id="sources-list-container"></div>
-          </div>
+      <!-- Tab 1: Recovery Twin -->
+      <div class="judge-tab-content" id="tab-twin" style="padding: 24px;">
+        <div id="recovery-twin-graph-container">
+          <p class="text-muted" style="text-align: center; padding: 30px;">Generate a plan above to view the dynamic 8-node Recovery Twin.</p>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- SECTION F: Test Laboratory (TC1, TC2, TC3, TC4) -->
-  <section class="container test-lab-section" id="test-lab-view">
-    <!-- Test lab content rendered by test_lab.js -->
-  </section>
+      <!-- Tab 2: Provenance Graph -->
+      <div class="judge-tab-content" id="tab-prov" style="display: none; padding: 24px;">
+        <div id="provenance-graph-container">
+          <p class="text-muted" style="text-align: center; padding: 30px;">Generate a plan above to view the 7-tier Provenance DAG.</p>
+        </div>
+      </div>
 
-  <!-- SECTION G: Project Information & Architecture -->
-  <section class="container info-section" id="project-info-section">
-    <div class="panel-card">
-      <div class="panel-header">
+      <!-- Tab 3: Counterfactual Simulator -->
+      <div class="judge-tab-content" id="tab-counter" style="display: none; padding: 24px;">
+        <div id="counterfactual-scenario-pills" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;"></div>
+        <div id="counterfactual-container"></div>
+      </div>
+
+      <!-- Tab 4: Evidence Vault -->
+      <div class="judge-tab-content" id="tab-vault" style="display: none; padding: 24px;">
+        <div id="evidence-vault-container">
+          <p class="text-muted" style="text-align: center; padding: 30px;">Evidence claims will appear here once a case is submitted.</p>
+        </div>
+      </div>
+
+      <!-- Tab 5: Risk Radar -->
+      <div class="judge-tab-content" id="tab-radar" style="display: none; padding: 24px;">
+        <div id="risk-radar-container"></div>
+      </div>
+
+      <!-- Tab 6: Safe Sandbox -->
+      <div class="judge-tab-content" id="tab-sandbox" style="display: none; padding: 24px;">
+        <div id="safe-sandbox-container"></div>
+      </div>
+
+      <!-- Tab 7: Test Laboratory -->
+      <div class="judge-tab-content" id="tab-testlab" style="display: none; padding: 24px;">
+        <div id="test-lab-view"></div>
+      </div>
+
+      <!-- Tab 8: Trace & Architecture -->
+      <div class="judge-tab-content" id="tab-trace" style="display: none; padding: 24px;">
+        <div class="workspace-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div>
+            <h4 style="font-size: 0.95rem; color: var(--text-highlight); margin-bottom: 12px;">Inspectable SQLite Trace Events</h4>
+            <div class="agent-activity-feed" id="agent-activity-view">
+              <p class="text-muted" style="text-align: center; padding: 24px;">Awaiting case submission.</p>
+            </div>
+          </div>
+          <div>
+            <h4 style="font-size: 0.95rem; color: var(--text-highlight); margin-bottom: 12px;">System Architecture</h4>
+            <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: var(--radius-sm); font-size: 0.82rem; line-height: 1.6;">
+              <p><strong>RECLAIM AI — Recovery Compass</strong> unifies an 8-stage coordinated agent loop:</p>
+              <ol style="margin-left: 20px; color: var(--text-secondary);">
+                <li>Observe: Case Intake without storing real PII</li>
+                <li>Digital Twin: Dynamic 8-node state machine</li>
+                <li>Proof-of-Truth: Mined statutory evidence & conflict resolver</li>
+                <li>Adaptive Compass: Multi-route trade-off decision engine</li>
+                <li>Risk Radar: Anti-SSRF & official domain allowlist (.gov.in)</li>
+                <li>Human Approval Gate: Explicit consent before simulated actions</li>
+                <li>Safe Action Sandbox: Watermarked synthetic receipt generation</li>
+                <li>Independent Verifier: Verifies persisted records in SQLite</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ACCESSIBLE CIVIC COPILOT MODAL (ENGLISH / TAMIL) -->
+  <div class="copilot-modal-backdrop" id="copilot-modal" style="display: none;">
+    <div class="copilot-modal-box">
+      <div class="panel-header" style="padding: 16px 20px; border-bottom: 1px solid var(--border-subtle);">
         <div class="panel-header-left">
-          <h2>RECLAIM AI 2.0 — Architecture & Civic AI Guardrails</h2>
+          <h3 style="font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+            <span>💬 Accessible Civic Copilot</span>
+          </h3>
         </div>
-        <span class="panel-step-badge">SYSTEM ARCHITECTURE</span>
-      </div>
-
-      <p style="margin-bottom: 20px;">
-        RECLAIM AI 2.0 is engineered strictly for the <strong>Agentic AI Hackathon 2026 — Powered by Ziro.Digital</strong> 
-        under the <em>Social Impact & Sustainability AI</em> track. It unifies 5 core innovations into a single coordinated agent loop.
-      </p>
-
-      <div class="arch-flow-grid">
-        <div class="arch-node">
-          <h4>1. Observe & Intake</h4>
-          <p>Collects case attributes without storing real Aadhaar/PAN or sensitive PII.</p>
-        </div>
-        <div class="arch-node">
-          <h4>2. Recovery Twin</h4>
-          <p>Constructs dynamic dependency graph with real BLOCKED / READY / COMPLETED states.</p>
-        </div>
-        <div class="arch-node">
-          <h4>3. Proof-of-Truth Vault</h4>
-          <p>Mines statutory claims, assigns provenance tags, and resolves conflicting circulars.</p>
-        </div>
-        <div class="arch-node">
-          <h4>4. Adaptive Planner</h4>
-          <p>Compares Route 1 (DigiLocker), Route 2 (Statutory Portal), and Route 3 (Counter).</p>
-        </div>
-        <div class="arch-node">
-          <h4>5. Risk Radar</h4>
-          <p>Detects predatory brokers, SSRF, fee anomalies, and missing police reports.</p>
-        </div>
-        <div class="arch-node">
-          <h4>6. Safe Sandbox</h4>
-          <p>Simulates submission with idempotency keys and independent verification.</p>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button id="btn-toggle-lang" class="btn btn-secondary btn-sm" style="padding: 4px 10px; font-size: 0.78rem;">
+            🌐 English / தமிழ்
+          </button>
+          <button id="btn-close-copilot" class="btn btn-secondary btn-sm" style="padding: 4px 8px;">✕</button>
         </div>
       </div>
-
-      <div style="background: rgba(11, 19, 41, 0.6); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-top: 20px;">
-        <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: var(--text-highlight);">Technology Stack & Design Choices</h4>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
-          <strong>Backend:</strong> Python 3.13, Flask REST API, SQLite parameterized database, Google Gemini Interactions API (with deterministic offline civic reasoning fallback).<br>
-          <strong>Frontend:</strong> Native Vanilla ES6 modules, CSS3 civic tech design system with dark navy palette, glassmorphism, responsive CSS grid/flexbox, accessibility tags.<br>
-          <strong>Security:</strong> SSRF protection, URL sanitizer, zero-PII storage policy, idempotency keys, and explicit Human-in-the-Loop gates.
-        </p>
+      <div style="padding: 8px 20px; font-size: 0.78rem; color: var(--text-muted); background: rgba(0,0,0,0.2);">
+        Ask any lost-document question in plain English or Tamil. Grounded exclusively in verified government circulars.
       </div>
+      <div id="copilot-chat-container" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;"></div>
     </div>
-  </section>
+  </div>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-content">
-      <div class="footer-text">
-        <strong>RECLAIM AI 2.0</strong> &bull; Agentic AI Hackathon 2026 &bull; Powered by Ziro.Digital
+  <footer class="footer" style="margin-top: 60px; padding: 24px 0; border-top: var(--border-glass);">
+    <div class="container footer-content" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+      <div class="footer-text" style="font-size: 0.85rem;">
+        <strong>RECLAIM AI — Recovery Compass</strong> &bull; Agentic AI Hackathon 2026 &bull; Powered by Ziro.Digital
       </div>
-      <div class="footer-text" style="font-family: var(--font-mono); font-size: 0.78rem;">
-        Civic AI Safe Harbor &bull; Public Interest Social Impact MVP
+      <div class="footer-text" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted);">
+        Civic AI Safe Harbor &bull; Social Impact & Sustainability AI
       </div>
     </div>
   </footer>

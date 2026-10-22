@@ -16,6 +16,10 @@ from agent.adaptive_planner import AdaptiveRecoveryPlanner
 from agent.risk_radar import RecoveryRiskRadar
 from agent.mock_portal import MockGovernmentPortalService
 from agent.fixtures import OFFICIAL_TEST_SCENARIOS, DEMO_PRESETS
+from agent.counterfactual import CounterfactualSimulator
+from agent.provenance_graph import ProvenanceGraphEngine
+from agent.adversarial_lab import AdversarialLabEngine
+from agent.copilot import AccessibleCivicCopilot
 from database.models import (
     get_session_by_id,
     get_session_trace,
@@ -120,18 +124,34 @@ def compare_routes():
 
 # ==================== INNOVATION 4: RECOVERY RISK RADAR ====================
 
-@api_bp.route("/risk-radar/scan-url", methods=["POST"])
+@api_bp.route("/risk-radar/scan-url", methods=["GET", "POST", "OPTIONS"], strict_slashes=False)
 def scan_url():
-    """Safe domain checking tool. Evaluates URL against SSRF and broker heuristics."""
-    data = request.get_json() or {}
-    url = data.get("url", "")
+    """Safe domain checking tool. Evaluates URL against SSRF, allowlist, and broker heuristics."""
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+
+    url = ""
+    if request.is_json:
+        data = request.get_json(silent=True) or {}
+        url = data.get("url", "")
+    elif request.method == "GET":
+        url = request.args.get("url", "")
+    else:
+        # Fallback for form data or non-standard json
+        data = request.get_json(silent=True) or request.form or {}
+        url = data.get("url", "") if isinstance(data, dict) else ""
+
+    if not url:
+        url = request.args.get("url", "")
+
     if not url:
         return jsonify({"status": "error", "message": "URL parameter is required."}), 400
+
     scan_report = RecoveryRiskRadar.scan_url_safely(url)
     return jsonify({
         "status": "success",
         "scan_report": scan_report
-    })
+    }), 200
 
 # ==================== INNOVATION 5: MOCK PORTAL & SANDBOX ====================
 
@@ -425,3 +445,105 @@ def run_test_scenario():
         "executed_count": len(run_reports),
         "results": run_reports
     })
+
+# ==================== INNOVATION 2: COUNTERFACTUAL SIMULATOR ====================
+
+@api_bp.route("/recovery/counterfactual-scenarios", methods=["GET", "OPTIONS"], strict_slashes=False)
+def get_counterfactual_scenarios():
+    """Returns supported what-if counterfactual comparison scenarios."""
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+    return jsonify({
+        "status": "success",
+        "scenarios": CounterfactualSimulator.get_supported_scenarios()
+    })
+
+@api_bp.route("/recovery/counterfactual-simulate", methods=["POST", "OPTIONS"], strict_slashes=False)
+def simulate_counterfactual():
+    """
+    Executes what-if comparative simulation against baseline case.
+    Returns deltas in readiness, blockers, routes, and statutory requirements.
+    """
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+    data = request.get_json(silent=True) or {}
+    case_data = data.get("case_data") or data
+    scenario_id = data.get("scenario_id", "scenario_lost_vs_stolen")
+
+    result = CounterfactualSimulator.run_simulation(base_case=case_data, scenario_id=scenario_id)
+    return jsonify(result), 200
+
+# ==================== INNOVATION 3: PROVENANCE GRAPH ====================
+
+@api_bp.route("/recovery/<case_id>/provenance-graph", methods=["GET", "OPTIONS"], strict_slashes=False)
+def get_provenance_graph(case_id):
+    """
+    Returns 7-tier DAG connecting:
+    User Facts -> Official Sources -> Extracted Evidence -> Decision Rules -> Recommendations -> Actions -> Verifications
+    """
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+    graph = ProvenanceGraphEngine.build_graph_for_case(session_id=case_id)
+    return jsonify(graph), 200
+
+# ==================== INNOVATION 4: ADVERSARIAL TEST LAB ====================
+
+@api_bp.route("/tests/adversarial-scenarios", methods=["GET", "OPTIONS"], strict_slashes=False)
+def get_adversarial_scenarios():
+    """Returns the 7 synthetic adversarial security scenarios."""
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+    return jsonify({
+        "status": "success",
+        "scenarios": AdversarialLabEngine.get_scenarios()
+    })
+
+@api_bp.route("/tests/run-adversarial", methods=["POST", "OPTIONS"], strict_slashes=False)
+def run_adversarial_tests():
+    """Executes single or all 7 adversarial security test scenarios."""
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+    data = request.get_json(silent=True) or {}
+    scenario_id = data.get("scenario_id", "ALL")
+
+    if scenario_id == "ALL":
+        results = AdversarialLabEngine.run_all()
+    else:
+        results = [AdversarialLabEngine.run_scenario(scenario_id)]
+
+    passed_count = sum(1 for r in results if r.get("status") == "PASS")
+    return jsonify({
+        "status": "success",
+        "executed_count": len(results),
+        "passed_count": passed_count,
+        "failed_count": len(results) - passed_count,
+        "results": results
+    }), 200
+
+# ==================== INNOVATION 5: ACCESSIBLE CIVIC COPILOT ====================
+
+@api_bp.route("/copilot/chat", methods=["POST", "OPTIONS"], strict_slashes=False)
+def copilot_chat():
+    """
+    Bilingual civic recovery chatbot (English & Tamil).
+    Answers questions grounded exclusively in verified statutory sources.
+    """
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+    data = request.get_json(silent=True) or {}
+    message = data.get("message", "")
+    session_id = data.get("session_id")
+    case_data = data.get("case_data") or {}
+    language = data.get("language")
+
+    if not message:
+        return jsonify({"status": "error", "message": "Message parameter is required."}), 400
+
+    copilot_res = AccessibleCivicCopilot.process_query(
+        user_message=message,
+        case_data=case_data,
+        session_id=session_id,
+        preferred_language=language
+    )
+    return jsonify(copilot_res), 200
+

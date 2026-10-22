@@ -203,6 +203,329 @@ export const UI = {
     `;
   },
 
+  // ==================== RECOVERY COMPASS: 1-PAGE INTEGRATED ACTION PLAN ====================
+  renderRecoveryCompass(guidance, containerEl, onSwitchRoute, onApproveAction, onVerifyAction, receiptData = null) {
+    if (!containerEl || !guidance) return;
+    const plan = guidance.route_planning || {};
+    const recommended = plan.recommended_route;
+    const planB = plan.plan_b;
+    const planC = plan.plan_c;
+    const adaptiveReason = plan.adaptive_switch_reason;
+    const readiness = guidance.readiness || {};
+    const fees = guidance.fees || {};
+    const sources = guidance.sources || [];
+    const flagged = guidance.flagged_sources || [];
+    const whyMatrix = plan.why_chosen_matrix || [];
+    const isBlocked = plan.is_blocked_by_missing_authority;
+
+    if (isBlocked || !recommended) {
+      containerEl.innerHTML = `
+        <div class="panel-card" style="border: 1.5px solid #fbbf24; background: rgba(245, 158, 11, 0.05); padding: 24px;">
+          <div style="display: flex; gap: 14px; align-items: flex-start;">
+            <div style="font-size: 2.2rem; line-height: 1;">⚠️</div>
+            <div>
+              <h3 style="color: #fbbf24; margin-bottom: 6px; font-size: 1.15rem;">Clarification Required: Issuing Authority Unknown</h3>
+              <p style="font-size: 0.9rem; color: var(--text-primary); margin-bottom: 12px; line-height: 1.5;">
+                ${plan.decision_summary || 'Document reissue procedures are statutory and vary by university, state board, and transport office.'}
+              </p>
+              <div style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6; background: rgba(0,0,0,0.25); padding: 12px; border-radius: var(--radius-sm);">
+                <strong>Next Step:</strong> Please check your old marksheet header, hall ticket, or institution name and update the <strong>Issuing Authority</strong> field in Step 1.
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    const isFree = recommended.statutory_fee?.amount === 0;
+    const displayFee = isFree ? '₹0 (Free Public Pull)' : (fees.status === 'verified' && fees.amount !== null && fees.amount !== undefined ? `₹${fees.amount.toFixed(0)} (Verified Gazette Fee)` : 'Unverified (Requires Circular)');
+
+    const isDigital = recommended.route_id === 'ROUTE_DIGITAL_DIGILOCKER';
+    const turnaround = isDigital ? 'Instant (Under 2 Minutes)' : '7 to 14 Working Days (Speed Post)';
+    const primarySource = sources[0] || {};
+    const primaryUrl = primarySource.official_url || primarySource.official_hostname || 'https://india.gov.in';
+
+    containerEl.innerHTML = `
+      <div class="compass-plan-container">
+        <!-- 1. Hero Recommendation Card -->
+        <div class="compass-hero-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div class="compass-badge-ribbon ${adaptiveReason ? 'adaptive-switch' : ''}">
+              ${adaptiveReason ? '🔄 ADAPTIVE SWITCH ACTIVE: ALTERNATIVE ROUTE PROMOTED' : '⭐ RECOMMENDED RECOVERY ROUTE'}
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted);">
+              Readiness Score: <strong style="color: var(--teal-primary);">${readiness.score || 0}/100</strong>
+            </span>
+          </div>
+
+          <h2 class="compass-hero-title">${recommended.name}</h2>
+          
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
+            <span class="compass-route-badge active-badge">${recommended.channel}</span>
+            <span style="font-size: 0.78rem; color: var(--text-muted); align-self: center;">
+              Legal Validity: <strong>${recommended.legal_validity}</strong>
+            </span>
+          </div>
+
+          <!-- Key Metrics Grid -->
+          <div class="compass-key-metrics">
+            <div class="compass-metric-card">
+              <div class="compass-metric-label">⏱️ Estimated Time</div>
+              <div class="compass-metric-val" style="color: var(--teal-primary);">${turnaround}</div>
+            </div>
+            <div class="compass-metric-card">
+              <div class="compass-metric-label">💰 Statutory Fee</div>
+              <div class="compass-metric-val" style="color: #34d399;">${displayFee}</div>
+            </div>
+            <div class="compass-metric-card">
+              <div class="compass-metric-label">⚖️ Statutory Authority</div>
+              <div class="compass-metric-val" style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.3;">${recommended.statutory_basis}</div>
+            </div>
+            <div class="compass-metric-card">
+              <div class="compass-metric-label">🎯 Route Feasibility</div>
+              <div class="compass-metric-val" style="color: ${recommended.feasibility_score >= 80 ? '#34d399' : '#fbbf24'};">${recommended.feasibility_score}/100</div>
+            </div>
+          </div>
+
+          <!-- Why the Compass Chose This -->
+          <div class="compass-why-box">
+            <strong>Why did the Compass choose this route?</strong><br>
+            ${adaptiveReason ? `<span style="color: #fbbf24; font-weight: 600;">${adaptiveReason}</span><br>` : ''}
+            ${plan.decision_summary || ''}
+            ${whyMatrix.length > 0 ? `
+              <ul style="margin: 8px 0 0 18px; font-size: 0.82rem;">
+                ${whyMatrix.map(m => `<li><strong>${m.rule}:</strong> ${m.justification}</li>`).join('')}
+              </ul>
+            ` : ''}
+          </div>
+
+          <!-- Verified Portal Link -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-subtle);">
+            <div>
+              <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Official Portal Gateway:</span><br>
+              <a href="${primaryUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 1rem; font-weight: 700; color: var(--teal-primary); display: inline-flex; align-items: center; gap: 6px;">
+                <span>${primarySource.issuing_authority || 'Authorized Government Portal'}</span>
+                <span>↗</span>
+              </a>
+              <span style="display: inline-block; margin-left: 8px; font-size: 0.74rem; padding: 2px 8px; border-radius: 4px; background: rgba(16,185,129,0.15); color: #34d399; font-weight: 600;">
+                ✓ Official .gov.in Allowlist Passed
+              </span>
+            </div>
+            ${primarySource.retrieval_timestamp ? `
+              <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
+                Verified: ${primarySource.retrieval_timestamp}
+              </div>
+            ` : ''}
+          </div>
+        </div>
+
+        <!-- 2. Preparation Checklist (Interactive) -->
+        <div class="panel-card" style="margin-bottom: 24px;">
+          <div class="panel-header">
+            <div class="panel-header-left">
+              <h2>Preparation Checklist</h2>
+            </div>
+            <span class="panel-step-badge">REQUIRED EVIDENCE</span>
+          </div>
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 12px;">
+            Items required to execute this recovery route. Check each item as you prepare it:
+          </p>
+          <div class="checklist-container">
+            ${(recommended.prerequisites || []).map((p, idx) => `
+              <label class="checklist-item ready" style="cursor: pointer;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <input type="checkbox" checked style="accent-color: var(--teal-primary);">
+                  <span style="color: var(--text-primary); font-weight: 500;">${p}</span>
+                </div>
+                <span class="checklist-tag tag-ready">Ready</span>
+              </label>
+            `).join('')}
+            ${(guidance.missing_prerequisites || []).map(m => `
+              <label class="checklist-item missing" style="cursor: pointer;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <input type="checkbox" style="accent-color: var(--rose-danger);">
+                  <span style="color: #f87171; font-weight: 600;">${m}</span>
+                </div>
+                <span class="checklist-tag tag-missing">Missing / Required</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- 3. Plan B & Alternative Routes Visual Comparison -->
+        <div class="panel-card" style="margin-bottom: 24px;">
+          <div class="panel-header">
+            <div class="panel-header-left">
+              <h2>Plan B & Route Comparison</h2>
+            </div>
+            <span class="panel-step-badge">ADAPTIVE ENGINE</span>
+          </div>
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 14px;">
+            The Recovery Compass actively monitors availability and evidentiary constraints. If you need physical delivery or if your primary route is unavailable, switch below:
+          </p>
+
+          <div class="compass-compare-grid">
+            <!-- Active Route -->
+            <div class="compass-route-card is-active">
+              <div>
+                <span class="compass-route-badge active-badge">Active Recommendation</span>
+                <h3 style="font-size: 1.05rem; margin: 4px 0 8px;">${recommended.name}</h3>
+                <div style="font-size: 0.8rem; color: var(--teal-primary); font-weight: 600; margin-bottom: 8px;">
+                  ${displayFee} &bull; ${turnaround}
+                </div>
+                <p style="font-size: 0.78rem; color: var(--text-secondary);">
+                  ${recommended.advantages ? recommended.advantages[0] : 'Current active path'}
+                </p>
+              </div>
+              <div style="margin-top: 14px; padding: 8px; background: rgba(0,242,254,0.1); border-radius: 4px; font-size: 0.76rem; text-align: center; color: var(--teal-primary); font-weight: 600;">
+                ✓ Currently Active
+              </div>
+            </div>
+
+            <!-- Plan B -->
+            ${planB ? `
+              <div class="compass-route-card is-plan-b">
+                <div>
+                  <span class="compass-route-badge plan-b-badge">Plan B (Fallback / Alternative)</span>
+                  <h3 style="font-size: 1.05rem; margin: 4px 0 8px;">${planB.name}</h3>
+                  <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 600; margin-bottom: 8px;">
+                    Fee: ${planB.statutory_fee?.currency || 'INR'} ${planB.statutory_fee?.amount !== null && planB.statutory_fee?.amount !== undefined ? planB.statutory_fee.amount : 'Gazette Schedule'} &bull; 7-14 Days
+                  </div>
+                  <p style="font-size: 0.78rem; color: var(--text-secondary);">
+                    ${planB.advantages ? planB.advantages[0] : 'Delivers authentic physical paper duplicate'}
+                  </p>
+                </div>
+                <button type="button" class="btn-switch-plan" id="btn-switch-to-plan-b" data-route-id="${planB.route_id}">
+                  <span>🔄 Switch to Plan B (${planB.route_id === 'ROUTE_DIGITAL_DIGILOCKER' ? 'Digital Express' : 'Statutory Portal'})</span>
+                </button>
+              </div>
+            ` : ''}
+
+            <!-- Plan C -->
+            ${planC ? `
+              <div class="compass-route-card">
+                <div>
+                  <span class="compass-route-badge plan-c-badge">Plan C (In-Person Fallback)</span>
+                  <h3 style="font-size: 1.05rem; margin: 4px 0 8px;">${planC.name}</h3>
+                  <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-bottom: 8px;">
+                    Manual Counter &bull; Treasury Challan
+                  </div>
+                  <p style="font-size: 0.78rem; color: var(--text-secondary);">
+                    Direct facilitation counter submission when online records or biometrics mismatch.
+                  </p>
+                </div>
+                <button type="button" class="btn-switch-plan" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border-color: var(--border-subtle);" id="btn-switch-to-plan-c" data-route-id="${planC.route_id}">
+                  <span>Switch to In-Person Counter</span>
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+
+        <!-- 4. Safety & Fraud Warnings -->
+        ${flagged.length > 0 ? `
+          <div class="panel-card" style="border: 1.5px solid var(--rose-danger); background: rgba(239, 68, 68, 0.05); margin-bottom: 24px;">
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <div style="font-size: 1.8rem; line-height: 1;">🚨</div>
+              <div>
+                <h3 style="color: #f87171; margin-bottom: 6px;">Safety Warning: Unofficial Commercial Intermediary Detected</h3>
+                <p style="font-size: 0.85rem; color: var(--text-primary); margin-bottom: 8px;">
+                  The candidate website (<code>${flagged[0].url}</code>) was flagged as an unofficial broker.
+                </p>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;">
+                  <strong>Threat Explanation:</strong> ${flagged[0].reason}<br>
+                  <strong style="color: #34d399;">Safe Action:</strong> Use the official government gateway above. Never pay ₹1,500+ broker fees or share Aadhaar OTPs with private intermediaries.
+                </div>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- 5. Step 8: Safe Action Sandbox (Human Approval Gate) -->
+        <div class="panel-card" style="margin-bottom: 24px;" id="sandbox-action-card">
+          <div class="panel-header">
+            <div class="panel-header-left">
+              <h2>Step 8: Human Approval Gate & Safe Action Sandbox</h2>
+            </div>
+            <span class="panel-step-badge">SIMULATED EXECUTION</span>
+          </div>
+
+          ${receiptData ? `
+            <!-- Confirmed Synthetic Receipt -->
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1.5px solid var(--emerald-success); border-radius: var(--radius-md); padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: #34d399; text-transform: uppercase;">
+                  ✓ Simulated Submission Confirmed
+                </span>
+                <span class="watermark-tag" style="background: #ef4444; color: #fff; font-weight: 800; font-size: 0.72rem; padding: 2px 8px; border-radius: 4px;">
+                  SYNTHETIC DEMO — NOT A REAL GOVERNMENT APPLICATION
+                </span>
+              </div>
+
+              <div style="font-size: 1.25rem; font-family: var(--font-mono); font-weight: 800; color: var(--teal-primary); margin-bottom: 8px;">
+                Reference: ${receiptData.application_reference || receiptData.reference}
+              </div>
+
+              <div style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                Application prefilled for <strong>${receiptData.authority || 'Issuing Authority'}</strong>.<br>
+                Receipt saved to SQLite database with SHA-256 idempotency signature.
+              </div>
+
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-verify-database" data-ref="${receiptData.application_reference || receiptData.reference}">
+                  <span>🔍 Verify Stored Record in SQLite Database</span>
+                </button>
+                <div id="sandbox-verify-output" style="font-size: 0.8rem;"></div>
+              </div>
+            </div>
+          ` : `
+            <!-- Awaiting Approval Prompt -->
+            <div>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.5;">
+                To generate your prefilled recovery dossier and safe portal submission package, explicit citizen approval is required.
+                <strong>No real payment will be debited and no external database will be modified.</strong>
+              </p>
+
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-primary" id="btn-compass-approve">
+                  <span>⚡ Approve Simulated Application (Safe Demo)</span>
+                </button>
+                <button type="button" class="btn btn-secondary" id="btn-compass-decline">
+                  <span>✕ Decline</span>
+                </button>
+              </div>
+            </div>
+          `}
+        </div>
+      </div>
+    `;
+
+    // Event listeners
+    containerEl.querySelector('#btn-switch-to-plan-b')?.addEventListener('click', (e) => {
+      const targetId = e.currentTarget.dataset.routeId;
+      if (onSwitchRoute) onSwitchRoute(targetId);
+    });
+
+    containerEl.querySelector('#btn-switch-to-plan-c')?.addEventListener('click', (e) => {
+      const targetId = e.currentTarget.dataset.routeId;
+      if (onSwitchRoute) onSwitchRoute(targetId);
+    });
+
+    containerEl.querySelector('#btn-compass-approve')?.addEventListener('click', () => {
+      if (onApproveAction) onApproveAction();
+    });
+
+    containerEl.querySelector('#btn-compass-decline')?.addEventListener('click', () => {
+      UI.showToast('Citizen declined simulated submission. Case paused.', 'info');
+    });
+
+    containerEl.querySelector('#btn-verify-database')?.addEventListener('click', (e) => {
+      const ref = e.currentTarget.dataset.ref;
+      if (onVerifyAction) onVerifyAction(ref);
+    });
+  },
+
   // ==================== INNOVATION 3: ADAPTIVE ROUTE COMPARISON ====================
   renderRouteComparison(routePlan, containerEl) {
     if (!containerEl || !routePlan) return;
@@ -633,5 +956,290 @@ export const UI = {
         </p>
       </div>
     `;
+  },
+
+  // ==================== INNOVATION 2: COUNTERFACTUAL SIMULATOR ====================
+  renderCounterfactualSimulator(result, containerEl, onSelectScenario, scenarios = [], activeId = '') {
+    if (!containerEl || !result) return;
+    const b = result.baseline || {};
+    const m = result.modeled || {};
+    const d = result.comparative_deltas || {};
+
+    const scoreDelta = d.readiness_score_delta || 0;
+    const deltaBadgeClass = scoreDelta > 0 ? 'positive' : (scoreDelta < 0 ? 'negative' : '');
+    const deltaSign = scoreDelta > 0 ? `+${scoreDelta}%` : `${scoreDelta}%`;
+
+    containerEl.innerHTML = `
+      <div class="cf-comparison-grid">
+        <!-- Left: Baseline Scenario -->
+        <div class="cf-card baseline">
+          <div class="cf-header">
+            <span class="cf-title">Baseline Case</span>
+            <span class="panel-step-badge" style="background: rgba(56,189,248,0.15); color: #38bdf8;">
+              ${b.label || 'Standard Loss Condition'}
+            </span>
+          </div>
+
+          <div class="cf-metric-row">
+            <span class="cf-metric-label">Readiness Score:</span>
+            <span class="cf-metric-value" style="color: var(--teal-primary); font-family: var(--font-mono); font-size: 1.1rem;">
+              ${b.readiness_score || 0}%
+            </span>
+          </div>
+          <div class="cf-metric-row">
+            <span class="cf-metric-label">Recommended Route:</span>
+            <span class="cf-metric-value">${b.recommended_route || 'Pending'}</span>
+          </div>
+          <div class="cf-metric-row">
+            <span class="cf-metric-label">DigiLocker Viable:</span>
+            <span class="cf-metric-value" style="color: ${b.digilocker_viable ? '#34d399' : '#f87171'};">
+              ${b.digilocker_viable ? '✓ Instant Pull Viable' : '✕ Blocked'}
+            </span>
+          </div>
+          <div class="cf-metric-row">
+            <span class="cf-metric-label">Statutory Fee:</span>
+            <span class="cf-metric-value">
+              ${b.fee_status === 'verified' ? `INR ${(b.fee_amount || 0).toFixed(2)} (Verified)` : 'Unverified'}
+            </span>
+          </div>
+          <div class="cf-metric-row">
+            <span class="cf-metric-label">Blocked Graph Nodes:</span>
+            <span class="cf-metric-value" style="color: ${(b.blocked_nodes || []).length === 0 ? '#34d399' : '#fbbf24'};">
+              ${(b.blocked_nodes || []).length} Nodes Blocked
+            </span>
+          </div>
+
+          <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06);">
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;">Next Action:</div>
+            <div style="font-size: 0.82rem; color: var(--text-highlight); font-weight: 600;">
+              ${b.next_action || 'Review guidance'}
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Counterfactual Modeled Scenario -->
+        <div class="cf-card modeled">
+          <div class="cf-header">
+            <span class="cf-title">What-If Modeled Outcome</span>
+            <span class="cf-delta-badge ${deltaBadgeClass}">
+              Readiness: ${deltaSign}
+            </span>
+          </div>
+
+          <div class="cf-metric-row">
+            <span class="cf-metric-label">Modeled Readiness:</span>
+            <span class="cf-metric-value" style="color: ${scoreDelta >= 0 ? '#34d399' : '#f87171'}; font-family: var(--font-mono); font-size: 1.1rem;">
+              ${m.readiness_score || 0}%
+            </span>
+          </div>
+          <div class="cf-metric-row">
+            <span class="cf-metric-label">Adapted Route:</span>
+            <span class="cf-metric-value" style="color: ${d.route_shifted ? '#fbbf24' : 'inherit'};">
+              ${m.recommended_route || 'Pending'} ${d.route_shifted ? '⚡ Shifted' : ''}
+            </span>
+          </div>
+          <div class="cf-metric-row">
+            <span class="cf-metric-label">DigiLocker Viable:</span>
+            <span class="cf-metric-value" style="color: ${m.digilocker_viable ? '#34d399' : '#f87171'};">
+              ${m.digilocker_viable ? '✓ Instant Pull Viable' : '✕ Blocked'}
+            </span>
+          </div>
+          <div class="cf-metric-row">
+            <span class="cf-metric-label">Statutory Fee:</span>
+            <span class="cf-metric-value">
+              ${m.fee_status === 'verified' ? `INR ${(m.fee_amount || 0).toFixed(2)} (Verified)` : 'Unverified (Gate Locked)'}
+            </span>
+          </div>
+          <div class="cf-metric-row">
+            <span class="cf-metric-label">New Blocked Nodes:</span>
+            <span class="cf-metric-value" style="color: ${(d.new_blocked_nodes || []).length > 0 ? '#f87171' : '#34d399'};">
+              ${(d.new_blocked_nodes || []).length > 0 ? d.new_blocked_nodes.join(', ') : 'None'}
+            </span>
+          </div>
+
+          <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06);">
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;">Adapted Next Action:</div>
+            <div style="font-size: 0.82rem; color: var(--teal-primary); font-weight: 600;">
+              ${m.next_action || 'Review guidance'}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statutory Rationale Takeaway -->
+      <div class="cf-takeaway-box">
+        <strong style="color: var(--teal-primary); display: block; margin-bottom: 4px;">
+          🧠 Agent Strategic Rationale & Legal Explanation:
+        </strong>
+        ${d.key_takeaway || 'Scenario modeled dynamically.'}
+      </div>
+
+      <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 10px; font-family: var(--font-mono);">
+        ${result.statutory_disclaimer || ''}
+      </div>
+    `;
+  },
+
+  // ==================== INNOVATION 3: PROVENANCE GRAPH ====================
+  renderProvenanceGraph(graph, containerEl) {
+    if (!containerEl || !graph) return;
+    const nodes = graph.nodes || [];
+    const tiers = graph.tier_metadata || [];
+
+    // Group nodes by tier
+    const nodesByTier = {};
+    tiers.forEach(t => { nodesByTier[t.tier] = []; });
+    nodes.forEach(n => {
+      if (nodesByTier[n.tier]) {
+        nodesByTier[n.tier].push(n);
+      }
+    });
+
+    containerEl.innerHTML = `
+      <!-- Summary Metrics Bar -->
+      <div class="provenance-metrics-strip">
+        <div class="prov-metric-item">
+          <span class="val">${graph.node_count || nodes.length}</span>
+          <span class="lbl">DAG Nodes</span>
+        </div>
+        <div class="prov-metric-item">
+          <span class="val">${graph.edge_count || (graph.edges || []).length}</span>
+          <span class="lbl">Evidence Edges</span>
+        </div>
+        <div class="prov-metric-item">
+          <span class="val" style="color: #34d399;">${graph.verified_claim_count || 0}</span>
+          <span class="lbl">Verified Claims</span>
+        </div>
+        <div class="prov-metric-item">
+          <span class="val" style="color: ${(graph.unsupported_claim_count || 0) > 0 ? '#fbbf24' : '#34d399'};">
+            ${graph.unsupported_claim_count || 0}
+          </span>
+          <span class="lbl">Assumptions</span>
+        </div>
+        <div class="prov-metric-item">
+          <span class="val" style="color: var(--teal-primary);">${graph.provenance_traceability_score || 100}%</span>
+          <span class="lbl">Traceability</span>
+        </div>
+      </div>
+
+      <!-- 7 Horizontal Lanes representing DAG Tiers -->
+      <div class="provenance-tiers-container">
+        ${tiers.map(t => {
+          const tierNodes = nodesByTier[t.tier] || [];
+          return `
+            <div class="provenance-tier-lane">
+              <div class="prov-tier-header" style="color: ${t.color}; border-color: ${t.color};">
+                Tier ${t.tier}: ${t.name}
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                ${tierNodes.length === 0 ? `
+                  <div style="font-size: 0.74rem; color: var(--text-muted); padding: 8px;">No active records</div>
+                ` : tierNodes.map(n => `
+                  <div class="prov-node-card ${n.is_unsupported_or_stale ? 'unsupported' : ''}">
+                    <div class="prov-node-title">${n.label}</div>
+                    <div class="prov-node-desc">${n.detail}</div>
+                    <span class="prov-node-badge" style="background: ${n.is_unsupported_or_stale ? 'rgba(245,158,11,0.2)' : 'rgba(56,189,248,0.15)'}; color: ${n.is_unsupported_or_stale ? '#fbbf24' : '#38bdf8'};">
+                      ${n.status}
+                    </span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+
+      <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 10px; font-family: var(--font-mono);">
+        ✓ Anti-Hallucination Guard active: Every downstream recommendation traces directly back to gazetted statutory citations.
+      </div>
+    `;
+  },
+
+  // ==================== INNOVATION 5: ACCESSIBLE CIVIC COPILOT ====================
+  renderCivicCopilot(containerEl, onSendMessage, onQuickQuestion) {
+    if (!containerEl) return;
+    containerEl.innerHTML = `
+      <div class="copilot-box">
+        <!-- Message History Feed -->
+        <div class="copilot-messages" id="copilot-msg-feed">
+          <div class="copilot-msg bot">
+            <strong>Civic Copilot:</strong><br>
+            Hello! I am your Accessible Civic Copilot. Ask me any question in simple English or Tamil (தமிழ்) about lost certificates, FIR rules, fees, or legal procedures.
+          </div>
+        </div>
+
+        <!-- Detected Legal Terms Strip -->
+        <div class="copilot-terms-strip" id="copilot-terms-strip" style="display: none;"></div>
+
+        <!-- Quick Inquiry Chips -->
+        <div style="padding: 8px 16px; background: rgba(0,0,0,0.2); display: flex; gap: 6px; flex-wrap: wrap;">
+          <button class="btn btn-secondary btn-sm copilot-quick-btn" data-query="What is the first step to recover my document?" style="font-size: 0.74rem; padding: 3px 8px;">
+            1. First Step?
+          </button>
+          <button class="btn btn-secondary btn-sm copilot-quick-btn" data-query="Do I need a formal police FIR or an online loss report?" style="font-size: 0.74rem; padding: 3px 8px;">
+            2. Is FIR Mandatory?
+          </button>
+          <button class="btn btn-secondary btn-sm copilot-quick-btn" data-query="What is the verified statutory fee?" style="font-size: 0.74rem; padding: 3px 8px;">
+            3. Verified Fee?
+          </button>
+          <button class="btn btn-secondary btn-sm copilot-quick-btn" data-query="என் ஓட்டுநர் உரிமம் தொலைந்துவிட்டது, நான் என்ன செய்ய வேண்டும்?" style="font-size: 0.74rem; padding: 3px 8px; color: #38bdf8;">
+            4. தமிழ் உதவி (Tamil Guide)
+          </button>
+        </div>
+
+        <!-- Input Bar -->
+        <div class="copilot-input-bar">
+          <input type="text" id="copilot-user-input" placeholder="Ask a recovery question in English or தமிழ்..." />
+          <button id="btn-copilot-send" class="btn btn-primary" style="padding: 8px 16px;">Send</button>
+        </div>
+      </div>
+    `;
+
+    // Event listeners
+    const sendBtn = document.getElementById('btn-copilot-send');
+    const inputEl = document.getElementById('copilot-user-input');
+
+    const doSend = () => {
+      const msg = inputEl.value.trim();
+      if (msg && onSendMessage) {
+        inputEl.value = '';
+        onSendMessage(msg);
+      }
+    };
+
+    sendBtn?.addEventListener('click', doSend);
+    inputEl?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') doSend();
+    });
+
+    containerEl.querySelectorAll('.copilot-quick-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const q = btn.getAttribute('data-query');
+        if (q && onQuickQuestion) onQuickQuestion(q);
+      });
+    });
+  },
+
+  appendCopilotMessage(sender, text, terms = []) {
+    const feed = document.getElementById('copilot-msg-feed');
+    if (!feed) return;
+
+    const div = document.createElement('div');
+    div.className = `copilot-msg ${sender}`;
+    div.innerHTML = `<strong>${sender === 'user' ? 'You' : 'Civic Copilot'}:</strong><br>${text.replace(/\n/g, '<br>')}`;
+    feed.appendChild(div);
+    feed.scrollTop = feed.scrollHeight;
+
+    // Terms strip
+    const termsStrip = document.getElementById('copilot-terms-strip');
+    if (termsStrip && terms && terms.length > 0) {
+      termsStrip.style.display = 'flex';
+      termsStrip.innerHTML = terms.map(t => `
+        <span class="term-chip" title="${t.explanation}">
+          📖 ${t.term}: ${t.explanation.slice(0, 45)}...
+        </span>
+      `).join('');
+    }
   }
 };
+

@@ -134,5 +134,57 @@ export const API = {
       body: JSON.stringify({ scenario_id: scenarioId })
     });
     return res.json();
+  },
+
+  // ================= INNOVATION 2: COUNTERFACTUAL SIMULATOR =================
+  async getCounterfactualScenarios() {
+    const res = await fetch(`${API_BASE}/recovery/counterfactual-scenarios`);
+    return res.json();
+  },
+
+  async simulateCounterfactual(caseData, scenarioId) {
+    const res = await fetch(`${API_BASE}/recovery/counterfactual-simulate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ case_data: caseData, scenario_id: scenarioId })
+    });
+    return res.json();
+  },
+
+  // ================= INNOVATION 3: PROVENANCE GRAPH =================
+  async getProvenanceGraph(caseId) {
+    const res = await fetch(`${API_BASE}/recovery/${encodeURIComponent(caseId)}/provenance-graph`);
+    return res.json();
+  },
+
+  // ================= INNOVATION 4: ADVERSARIAL TEST LAB =================
+  async getAdversarialScenarios() {
+    const res = await fetch(`${API_BASE}/tests/adversarial-scenarios`);
+    return res.json();
+  },
+
+  async runAdversarialTests(scenarioId = 'ALL') {
+    const res = await fetch(`${API_BASE}/tests/run-adversarial`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scenario_id: scenarioId })
+    });
+    return res.json();
+  },
+
+  // ================= INNOVATION 5: ACCESSIBLE CIVIC COPILOT =================
+  async sendCopilotMessage(message, caseData = {}, sessionId = null, language = null) {
+    const res = await fetch(`${API_BASE}/copilot/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: message,
+        case_data: caseData,
+        session_id: sessionId,
+        language: language
+      })
+    });
+    return res.json();
   }
 };
+

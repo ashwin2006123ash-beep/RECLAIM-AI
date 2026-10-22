@@ -37,14 +37,34 @@ class AdaptiveRecoveryPlanner:
 
         routes: List[Dict[str, Any]] = []
 
+        primary_route_available = case_data.get("primary_route_available", True)
+        if case_data.get("simulate_route_outage"):
+            primary_route_available = False
+        preferred_route = case_data.get("preferred_route")
+
         # ================= ROUTE 1: INSTANT DIGITAL CREDENTIAL (DIGILOCKER) =================
         digilocker_supported = doc_type in ["edu_cert", "driving_licence", "pan_card", "voter_id", "aadhaar"]
         digilocker_prereqs = ["Aadhaar-linked mobile number for OTP"]
         if not has_doc_number:
             digilocker_prereqs.append("Approximate registration / roll number / year of issue")
 
-        r1_feasible = digilocker_supported and authority.lower() not in ["unknown", "unknown autonomous college"]
-        r1_score = 90 if (r1_feasible and has_doc_number) else (65 if r1_feasible else 20)
+        r1_feasible = digilocker_supported and authority.lower() not in ["unknown", "unknown autonomous college"] and primary_route_available
+        if not primary_route_available:
+            r1_score = 15
+            r1_status = "TEMPORARILY_UNAVAILABLE"
+            r1_deferral = "Primary digital repository is experiencing simulated downtime or maintenance. Adaptive Recovery Compass has promoted Plan B."
+        elif not r1_feasible:
+            r1_score = 20
+            r1_status = "NOT_AVAILABLE_FOR_CATEGORY"
+            r1_deferral = "Issuing authority is unlisted or document category is not integrated with DigiLocker."
+        elif not has_doc_number:
+            r1_score = 55
+            r1_status = "FEASIBLE"
+            r1_deferral = "Requires exact roll/registration number to query MeitY database."
+        else:
+            r1_score = 90
+            r1_status = "FEASIBLE"
+            r1_deferral = None
 
         route_1 = {
             "route_id": "ROUTE_DIGITAL_DIGILOCKER",
@@ -66,11 +86,12 @@ class AdaptiveRecoveryPlanner:
             ],
             "limitations": [
                 "Requires linked mobile number for Aadhaar OTP authentication",
-                "Provides digital PDF / XML credential, not a physical embossed card/mark sheet"
+                "Provides digital PDF / XML credential, not a physical embossed card/mark sheet",
+                "Requires authentic roll or document number to locate the issuer record"
             ],
             "feasibility_score": r1_score,
-            "status": "FEASIBLE" if r1_feasible else "NOT_AVAILABLE_FOR_CATEGORY",
-            "deferral_reason": None if r1_feasible else "Issuing authority is unlisted or document category is not integrated with DigiLocker."
+            "status": r1_status,
+            "deferral_reason": r1_deferral
         }
         routes.append(route_1)
 
@@ -98,7 +119,7 @@ class AdaptiveRecoveryPlanner:
             "route_id": "ROUTE_OFFICIAL_ONLINE_PORTAL",
             "name": f"Route 2: Statutory Online Reissue Portal ({portal_name})",
             "channel": "Official Government Web Gateway & Speed Post Delivery",
-            "statutory_basis": primary_source.get("information_available", "Statutory Citizen Service Guidelines"),
+            "statutory_basis": primary_source.get("information_available", "Statutory Citizen Service Guidelines") if primary_source else "Statutory Citizen Service Guidelines",
             "legal_validity": "Issues an authentic replacement physical duplicate / smart card directly from the statutory issuer.",
             "statutory_fee": {
                 "amount": fee_info.get("amount"),
@@ -157,11 +178,7 @@ class AdaptiveRecoveryPlanner:
         routes.append(route_3)
 
         # ================= DECISION LOGIC: SELECT RECOMMENDED ROUTE =================
-        # Logic:
-        # If authority is unknown -> flag that decision is blocked by missing authority!
-        # If DigiLocker is feasible and user needs immediate proof -> Recommend DigiLocker for instant zero-cost proof, with Route 2 as companion for physical.
-        # If user has all prerequisites (FIR + Affidavit) -> Recommend Route 2 for genuine physical reissue.
-        # If missing FIR or Affidavit -> Highlight DigiLocker as primary immediate, Route 2 as deferred pending prerequisites.
+        adaptive_switch_reason = None
 
         if not authority or authority.lower() in ["unknown", "unknown autonomous college"]:
             recommended = None
@@ -169,6 +186,39 @@ class AdaptiveRecoveryPlanner:
             why_chosen = [
                 {"rule": "Authority Rule", "justification": "Reissue procedures are statutory; different universities and boards have distinct bylaws."},
                 {"rule": "Safety Guard", "justification": "Refusing to recommend an arbitrary portal prevents misleading the citizen."}
+            ]
+        elif preferred_route == "ROUTE_OFFICIAL_ONLINE_PORTAL":
+            recommended = route_2
+            adaptive_switch_reason = "Citizen switched route: Selected official statutory portal for physical dispatch."
+            decision_summary = f"Recommended: {route_2['name']} based on user preference for physical document dispatch."
+            why_chosen = [
+                {"rule": "User Preference Override", "justification": "User selected physical duplicate reissue over digital retrieval."},
+                {"rule": "Official Source Rule", "justification": f"Verified portal ({portal_name}) confirmed in authoritative registry."}
+            ]
+        elif preferred_route == "ROUTE_IN_PERSON_COUNTER":
+            recommended = route_3
+            adaptive_switch_reason = "Citizen switched route: Selected in-person administrative counter submission."
+            decision_summary = f"Recommended: {route_3['name']} for physical counter submission."
+            why_chosen = [
+                {"rule": "User Preference Override", "justification": "User requested in-person facilitation counter."}
+            ]
+        elif not primary_route_available:
+            # Route 1 is down -> auto adapt to Route 2 (or Route 3)
+            recommended = route_2 if r2_feasible else route_3
+            adaptive_switch_reason = "Primary Route (DigiLocker) is currently unavailable. Adaptive Compass automatically routed to Plan B (Official Statutory Portal)."
+            decision_summary = f"Adaptive Switch Active: {recommended['name']} recommended because primary digital route is unavailable."
+            why_chosen = [
+                {"rule": "Adaptive Resiliency Rule", "justification": "Primary digital service outage detected; automatically redirected to statutory online/offline reissue portal."},
+                {"rule": "Continuity Rule", "justification": "Ensures citizen recovery workflow is unblocked without waiting for service restoration."}
+            ]
+        elif not has_doc_number and doc_type in ["edu_cert", "driving_licence"]:
+            # Missing roll / document number makes DigiLocker difficult
+            recommended = route_2
+            adaptive_switch_reason = "Roll/Registration number is missing. DigiLocker cannot search cloud records without a roll number; recommending Board / RTO duplicate application (Plan B)."
+            decision_summary = f"Recommended: {route_2['name']} because previous document number/copy is unavailable for automated cloud pull."
+            why_chosen = [
+                {"rule": "Identifier Verification Rule", "justification": "Automated digital repositories require registration or roll numbers to query candidate records."},
+                {"rule": "Plan B Reissue Rule", "justification": f"Statutory portal ({portal_name}) allows historical archive search using candidate name, school/college code, and year."}
             ]
         elif readiness_score >= 70 and has_police_report and (has_affidavit or not needs_affidavit):
             recommended = route_2
@@ -182,7 +232,7 @@ class AdaptiveRecoveryPlanner:
                 {"rule": "Official Source Rule", "justification": f"Verified portal ({portal_name}) is registered in authoritative registry with confirmed fee schedule."},
                 {"rule": "Physical Document Requirement", "justification": "Citizen declared lost/stolen physical credential; official portal provides authentic re-embossed replacement."}
             ]
-        elif digilocker_supported:
+        elif digilocker_supported and r1_feasible:
             recommended = route_1
             decision_summary = (
                 f"Recommended: {route_1['name']} as the immediate zero-cost primary path. "
@@ -199,14 +249,22 @@ class AdaptiveRecoveryPlanner:
                 {"rule": "Statutory Authority Rule", "justification": f"Direct submission via {portal_name} is the standard statutory mechanism."}
             ]
 
-        # Alternative route
+        # Alternative routes
         alternatives = [r for r in routes if recommended and r["route_id"] != recommended["route_id"] and r["status"] == "FEASIBLE"]
         if not alternatives and routes:
             alternatives = [r for r in routes if recommended and r["route_id"] != recommended["route_id"]]
 
+        # Explicit Plan B and Plan C
+        plan_b = alternatives[0] if len(alternatives) > 0 else None
+        plan_c = alternatives[1] if len(alternatives) > 1 else (route_3 if recommended != route_3 else None)
+
         return {
             "recommended_route": recommended,
             "alternative_routes": alternatives,
+            "plan_b": plan_b,
+            "plan_c": plan_c,
+            "adaptive_switch_reason": adaptive_switch_reason,
+            "primary_route_available": primary_route_available,
             "all_routes": routes,
             "decision_summary": decision_summary,
             "why_chosen_matrix": why_chosen,
