@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RECLAIM AI 2.0 — Autonomous Civic Document Recovery Intelligence Platform</title>
+  <meta name="description" content="Autonomous, inspectable civic document recovery agent featuring Recovery Twins, Proof-of-Truth research, multi-route adaptive planning, Recovery Risk Radar, and Safe Action Sandbox.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar" id="top-navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand" id="nav-brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>RECLAIM AI 2.0</h1>
+          <span class="brand-tagline">Autonomous Civic Recovery Platform</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><button class="nav-link-btn active" data-target="recovery-workspace">Workspace</button></li>
+          <li><button class="nav-link-btn" data-target="recovery-twin-section">Recovery Twin</button></li>
+          <li><button class="nav-link-btn" data-target="route-planner-section">Adaptive Routes</button></li>
+          <li><button class="nav-link-btn" data-target="evidence-vault-section">Evidence Vault</button></li>
+          <li><button class="nav-link-btn" data-target="risk-radar-section">Risk Radar</button></li>
+          <li><button class="nav-link-btn" data-target="safe-sandbox-section">Safe Sandbox</button></li>
+          <li><button class="nav-link-btn" data-target="test-lab-view">Test Lab (TC1–TC4)</button></li>
+          <li><button class="nav-link-btn" data-target="project-info-section">Architecture</button></li>
+        </ul>
+      </nav>
+
+      <div class="nav-badge-engine" id="engine-status-badge">
+        <span class="status-dot"></span>
+        <span>INITIALIZING...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECTION A: Hero & Landing Page -->
+  <section class="hero-section" id="hero-landing">
+    <div class="container">
+      <div class="hero-pill">
+        <span>🏆 Agentic AI Hackathon 2026</span>
+        <span>•</span>
+        <span>Social Impact & Sustainability AI</span>
+      </div>
+
+      <h1 class="hero-title">
+        Lost a document? <br>
+        <span class="highlight">Reclaim your next step.</span>
+      </h1>
+
+      <p class="hero-desc">
+        A coordinated, evidence-first AI agent platform connecting <strong>Recovery Twins</strong>, <strong>Proof-of-Truth Research</strong>, <strong>Adaptive Route Planning</strong>, <strong>Recovery Risk Radar</strong>, and a <strong>Safe Action Sandbox</strong> for civic document restoration in India.
+      </p>
+
+      <div class="hero-actions">
+        <button id="btn-hero-start" class="btn btn-primary">
+          <span>🚀 Start Recovery Intelligence</span>
+        </button>
+        <button id="btn-hero-explore" class="btn btn-secondary">
+          <span>🔍 Explore System Architecture</span>
+        </button>
+      </div>
+
+      <!-- Feature Grid: 5 Core Innovations -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">🧬</div>
+          <h3>1. Recovery Twin</h3>
+          <p>Live digital case representation with an 8-node topological dependency graph, dynamic state transitions, and unblock triggers.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">📜</div>
+          <h3>2. Proof-of-Truth Vault</h3>
+          <p>Mines statutory gazettes, tags provenance (LIVE_VERIFIED, CACHED), and transparently resolves conflicting circulars.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">🧭</div>
+          <h3>3. Adaptive Planner</h3>
+          <p>Compares Route 1 (DigiLocker), Route 2 (Statutory Portal), and Route 3 (Physical Counter) with an explainable choice matrix.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">🛡️</div>
+          <h3>4. Risk Radar</h3>
+          <p>Scans for predatory brokers, fee anomalies, and missing evidence. Includes interactive Safe-Domain URL checking.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">🏛️</div>
+          <h3>5. Safe Action Sandbox</h3>
+          <p>Interactive mock portal with idempotency keys, Step 8 human approval gate, and independently verifiable synthetic receipts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION B: Recovery Workspace & Interactive Presets -->
+  <section class="container" id="recovery-workspace">
+    <!-- Presets Bar for Judges & Reviewers -->
+    <div class="presets-strip">
+      <div class="presets-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        <span>Demo Presets:</span>
+      </div>
+      <div id="presets-chips-container" style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+
+    <!-- Dual Workspace Grid: User Intake & Real Agent Activity Trace -->
+    <div class="workspace-grid">
+      <!-- Left Panel: User Intake Form -->
+      <div class="panel-card" id="intake-panel">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <h2>Recovery Intake</h2>
+          </div>
+          <span class="panel-step-badge">STAGE 1: OBSERVE</span>
+        </div>
+
+        <form id="intake-form">
+          <div class="form-group">
+            <label class="form-label" for="input-doc-type">Document Category *</label>
+            <select id="input-doc-type" class="form-select" required>
+              <option value="">Loading categories...</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="input-jurisdiction">State / Region *</label>
+              <input type="text" id="input-jurisdiction" class="form-input" placeholder="e.g. Central / Karnataka / Delhi" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-authority">Issuing Authority / Board *</label>
+              <input type="text" id="input-authority" class="form-input" placeholder="e.g. CBSE / MoRTH State RTO / Income Tax Dept" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Loss Condition *</label>
+            <div class="radio-pill-group">
+              <div class="radio-pill-item">
+                <input type="radio" id="status-lost" name="status_type" value="lost" checked>
+                <label class="radio-pill-label" for="status-lost">📄 Lost / Misplaced</label>
+              </div>
+              <div class="radio-pill-item">
+                <input type="radio" id="status-stolen" name="status_type" value="stolen">
+                <label class="radio-pill-label" for="status-stolen">🚨 Stolen / Theft</label>
+              </div>
+              <div class="radio-pill-item">
+                <input type="radio" id="status-damaged" name="status_type" value="damaged">
+                <label class="radio-pill-label" for="status-damaged">💧 Mutilated / Torn</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Supporting Evidence Available (Toggles live Recovery Twin)</label>
+            <div class="checkbox-card-grid">
+              <label class="checkbox-card">
+                <input type="checkbox" id="chk-police-report">
+                <div class="checkbox-card-text">
+                  <strong>Police Report / DDR</strong>
+                  <span>Online loss entry or FIR copy</span>
+                </div>
+              </label>
+
+              <label class="checkbox-card">
+                <input type="checkbox" id="chk-affidavit">
+                <div class="checkbox-card-text">
+                  <strong>Notarized Affidavit</strong>
+                  <span>On stamp paper (if required)</span>
+                </div>
+              </label>
+
+              <label class="checkbox-card">
+                <input type="checkbox" id="chk-id-proof" checked>
+                <div class="checkbox-card-text">
+                  <strong>Photo Identity Proof</strong>
+                  <span>Secondary government ID</span>
+                </div>
+              </label>
+
+              <label class="checkbox-card">
+                <input type="checkbox" id="chk-doc-number" checked>
+                <div class="checkbox-card-text">
+                  <strong>Previous Copy / Number</strong>
+                  <span>Old roll, registration, or scan</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-circumstances">
+              Incident Context & Circumstances <span class="optional">(Optional)</span>
+            </label>
+            <textarea id="input-circumstances" class="form-textarea" rows="2" placeholder="Briefly describe how or where the document was lost (e.g., lost in transit, misplaced in home relocation)..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-external-url">
+              Candidate Web URL to Safety-Check <span class="optional">(Optional - e.g. for TC2 verification)</span>
+            </label>
+            <input type="text" id="input-external-url" class="form-input" placeholder="e.g. https://quick-pan-agent.com/apply (Tests Risk Radar & Safety Guard)">
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-top: 24px;">
+            <button type="submit" id="btn-submit-intake" class="btn btn-primary" style="flex: 2;">
+              <span>⚡ Execute Coordinated Recovery Loop</span>
+            </button>
+            <button type="button" id="btn-reset-form" class="btn btn-secondary" style="flex: 1;">
+              <span>Reset</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Right Panel: Agent Activity Panel (Genuine Inspectable Events) -->
+      <div class="panel-card" id="agent-activity-panel">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <h2>Agent Activity Trace</h2>
+          </div>
+          <span class="panel-step-badge" style="background: rgba(16,185,129,0.15); color: #34d399; border-color: rgba(16,185,129,0.3);">
+            LIVE STATE ENGINE
+          </span>
+        </div>
+
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
+          Inspectable audit trail recording Observe -> Twin -> Investigate -> Reason -> Risk -> Sandbox transitions with SQLite persistence.
+        </p>
+
+        <div class="agent-activity-feed" id="agent-activity-view">
+          <p class="text-muted" style="text-align: center; padding: 48px 0;">
+            Awaiting user intake submission. Select a preset or click Execute to watch the coordinated agent loop.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INNOVATION 1 SECTION: RECOVERY TWIN & DEPENDENCY GRAPH -->
+  <section class="container" id="recovery-twin-section">
+    <div id="recovery-twin-view" style="display: none;">
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <h2>Innovation 1: Recovery Twin & Dependency Graph</h2>
+          </div>
+          <span class="panel-step-badge">LIVE DIGITAL TWIN</span>
+        </div>
+        <p style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 14px;">
+          Live digital representation of your document recovery case with genuine topological dependency states (BLOCKED, READY, IN_PROGRESS, COMPLETED, NEEDS_VERIFICATION).
+        </p>
+        <div id="recovery-twin-graph-container"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INNOVATION 3 SECTION: ADAPTIVE MULTI-ROUTE PLANNER -->
+  <section class="container" id="route-planner-section">
+    <div id="route-planner-view" style="display: none;">
+      <div id="route-planner-container"></div>
+    </div>
+  </section>
+
+  <!-- INNOVATION 2 SECTION: PROOF-OF-TRUTH EVIDENCE VAULT -->
+  <section class="container" id="evidence-vault-section">
+    <div id="evidence-vault-view" style="display: none;">
+      <div id="evidence-vault-container"></div>
+    </div>
+  </section>
+
+  <!-- INNOVATION 4 SECTION: RECOVERY RISK RADAR -->
+  <section class="container" id="risk-radar-section">
+    <div id="risk-radar-view" style="display: none;">
+      <div id="risk-radar-container"></div>
+    </div>
+  </section>
+
+  <!-- INNOVATION 5 SECTION: SAFE ACTION SANDBOX & MOCK PORTAL -->
+  <section class="container" id="safe-sandbox-section">
+    <div id="safe-sandbox-view" style="display: none;">
+      <div id="safe-sandbox-container"></div>
+    </div>
+  </section>
+
+  <!-- SECTION D & E: Recovery Results, Readiness Score, and Application Tracking -->
+  <section class="container" id="results-section">
+    <div id="results-view" style="display: none;">
+      <div class="results-container">
+        <!-- Left: Actionable Roadmap & Next Steps -->
+        <div>
+          <div class="panel-card" style="margin-bottom: 24px;">
+            <div class="panel-header">
+              <div class="panel-header-left">
+                <h2>Recommended Next Steps</h2>
+              </div>
+              <span class="panel-step-badge">ROADMAP</span>
+            </div>
+            <div id="next-steps-container"></div>
+          </div>
+
+          <!-- Application Tracking Status Card -->
+          <div id="tracking-status-container"></div>
+        </div>
+
+        <!-- Right: Readiness Indicator, Fee Transparency, & Source Cards -->
+        <div>
+          <!-- Readiness Gauge -->
+          <div id="readiness-gauge-container"></div>
+
+          <!-- Fee Transparency Card -->
+          <div id="fee-card-container"></div>
+
+          <!-- Official Sources & Safety Flagged Cards -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-header-left">
+                <h2>Evidence Vault & Sources</h2>
+              </div>
+              <span class="panel-step-badge">ALLOWLIST GUARD</span>
+            </div>
+            <div id="sources-list-container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION F: Test Laboratory (TC1, TC2, TC3, TC4) -->
+  <section class="container test-lab-section" id="test-lab-view">
+    <!-- Test lab content rendered by test_lab.js -->
+  </section>
+
+  <!-- SECTION G: Project Information & Architecture -->
+  <section class="container info-section" id="project-info-section">
+    <div class="panel-card">
+      <div class="panel-header">
+        <div class="panel-header-left">
+          <h2>RECLAIM AI 2.0 — Architecture & Civic AI Guardrails</h2>
+        </div>
+        <span class="panel-step-badge">SYSTEM ARCHITECTURE</span>
+      </div>
+
+      <p style="margin-bottom: 20px;">
+        RECLAIM AI 2.0 is engineered strictly for the <strong>Agentic AI Hackathon 2026 — Powered by Ziro.Digital</strong> 
+        under the <em>Social Impact & Sustainability AI</em> track. It unifies 5 core innovations into a single coordinated agent loop.
+      </p>
+
+      <div class="arch-flow-grid">
+        <div class="arch-node">
+          <h4>1. Observe & Intake</h4>
+          <p>Collects case attributes without storing real Aadhaar/PAN or sensitive PII.</p>
+        </div>
+        <div class="arch-node">
+          <h4>2. Recovery Twin</h4>
+          <p>Constructs dynamic dependency graph with real BLOCKED / READY / COMPLETED states.</p>
+        </div>
+        <div class="arch-node">
+          <h4>3. Proof-of-Truth Vault</h4>
+          <p>Mines statutory claims, assigns provenance tags, and resolves conflicting circulars.</p>
+        </div>
+        <div class="arch-node">
+          <h4>4. Adaptive Planner</h4>
+          <p>Compares Route 1 (DigiLocker), Route 2 (Statutory Portal), and Route 3 (Counter).</p>
+        </div>
+        <div class="arch-node">
+          <h4>5. Risk Radar</h4>
+          <p>Detects predatory brokers, SSRF, fee anomalies, and missing police reports.</p>
+        </div>
+        <div class="arch-node">
+          <h4>6. Safe Sandbox</h4>
+          <p>Simulates submission with idempotency keys and independent verification.</p>
+        </div>
+      </div>
+
+      <div style="background: rgba(11, 19, 41, 0.6); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-top: 20px;">
+        <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: var(--text-highlight);">Technology Stack & Design Choices</h4>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+          <strong>Backend:</strong> Python 3.13, Flask REST API, SQLite parameterized database, Google Gemini Interactions API (with deterministic offline civic reasoning fallback).<br>
+          <strong>Frontend:</strong> Native Vanilla ES6 modules, CSS3 civic tech design system with dark navy palette, glassmorphism, responsive CSS grid/flexbox, accessibility tags.<br>
+          <strong>Security:</strong> SSRF protection, URL sanitizer, zero-PII storage policy, idempotency keys, and explicit Human-in-the-Loop gates.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-text">
+        <strong>RECLAIM AI 2.0</strong> &bull; Agentic AI Hackathon 2026 &bull; Powered by Ziro.Digital
+      </div>
+      <div class="footer-text" style="font-family: var(--font-mono); font-size: 0.78rem;">
+        Civic AI Safe Harbor &bull; Public Interest Social Impact MVP
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Script Entrypoint -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
